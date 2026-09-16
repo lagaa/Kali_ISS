@@ -19,3 +19,41 @@ kali-linux-default
 ##   For the complete list see: https://www.kali.org/tools/
 ##                              https://pkg.kali.org/
 #<package>
+
+# Servizi e Web
+apache2
+vsftpd
+exim4
+
+# SSH e Trasferimento File
+openssh-client
+openssh-server
+wget
+curl
+
+# Sicurezza, Network e Analysis
+nmap
+wireshark
+tcpdump
+ettercap-common
+ettercap-text-only
+bind9-dnsutils
+iptables
+netfilter-persistent
+net-tools
+httptunnel
+ptunnel
+strongswan
+libstrongswan-extra-plugins
+gvm
+
+# Utility di Sistema, Utility File e Shell
+hexedit
+hashdeep
+p7zip-full
+alien
+nsis
+dkms
+lynx
+s-nail
+openssl
