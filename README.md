@@ -80,3 +80,76 @@ $ ./build.sh \
 [...]
 $
 ```
+
+
+# Guida Laga
+
+## Creazione ISO
+
+1. Aggiungi un nuovo disco rigido virtuale di almeno 35/40 GB (chiamato, ad esempio, kali_ISS.qcow2).
+Usando `virt-manager` o direttamente `qemu-system-x86_64`.
+
+2. Identifica il nuovo disco appena aggiunto (solitamente /dev/sdb o /dev/vdb).
+  ```
+  sudo fdisk -l
+  ```
+
+3. Una volta individuato (supponiamo sia `/dev/sda`), formattalo (serve solo se non è appena creato).
+  ```  
+  sudo mkfs.ext4 /dev/sda
+  ```
+
+4. Monta il disco e crea lo spazio di lavoro.
+  ```
+  sudo mkdir -p /mnt/build_workspace
+  ```
+  ```
+  sudo mount /dev/sda /mnt/build_workspace
+  ```
+  ```
+  sudo chown -R kali:kali /mnt/build_workspace
+  ```
+
+5. Sposta il progetto e compila.
+  ```
+  mv ~/Kali_ISS /mnt/build_workspace/
+  ```
+  ```
+  cd /mnt/build_workspace/Kali_ISS
+  ```
+  ```
+  sudo ./build.sh --clean
+  ```
+  ```
+  sudo ./build.sh --verbose
+  ```
+
+Alla fine si ottiene l'ISO nella cartella `/mnt/build_workspace/Kali_ISS`.
+
+## Spostare ISO
+
+Per spostare l'ISO sull'host, si può accedere direttamente al filesystem della VM:
+
+1. Spegni la VM Kali che monta il disco virtuale.
+
+2. Sull'Host, carica il modulo NBD (Network Block Device) e collega il disco virtuale:
+```
+sudo modprobe nbd max_part=8
+```
+```
+sudo qemu-nbd --connect=/dev/nbd0 /percorso/al/tuo/disco.qcow2
+```
+3. Monta la partizione della VM e copia il file:
+```
+sudo mount /dev/nbd0p1 /mnt
+```
+```
+cp /mnt/build_workspace/Kali_ISS/image/*.iso ~/
+```
+4. Smonta il disco e scollega NBD:
+```
+sudo umount /mnt
+```
+```
+sudo qemu-nbd --disconnect /dev/nbd0
+```
